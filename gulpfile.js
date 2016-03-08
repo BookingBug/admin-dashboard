@@ -1,18 +1,21 @@
 //Gulp components
 var gulp           = require('gulp'),
-    coffee         = require('gulp-coffee');      //Coffee to js compiler
-    concat         = require('gulp-concat'),      //concats files
-    uglify         = require('gulp-uglify'),      //uglifies files
-    ngAnnotate     = require('gulp-ng-annotate'), //annotates (angular brakes without this)
-    minifyCSS      = require('gulp-minify-css'),  //minifies css files
-    runSequence    = require('run-sequence'),     //runs gulp tasks in sequence (tasks as array)
-    sass           = require('gulp-sass'),        //sass compiler
-    mainBowerFiles = require('main-bower-files'), //gets the main bower dependencies files
-    fs             = require('fs'),               //filesystem util
-    path           = require('path'),             //path for fs
-    gulpif         = require('gulp-if'),          //execute tasks conditionally
-    gutil          = require('gulp-util'),        //utilities for gulp plugins
-    sourcemaps     = require('gulp-sourcemaps');  //creates sourcemaps for debugging
+    coffee         = require('gulp-coffee');        //Coffee to js compiler
+    concat         = require('gulp-concat'),        //concats files
+    uglify         = require('gulp-uglify'),        //uglifies files
+    ngAnnotate     = require('gulp-ng-annotate'),   //annotates (angular brakes without this)
+    minifyCSS      = require('gulp-minify-css'),    //minifies css files
+    runSequence    = require('run-sequence'),       //runs gulp tasks in sequence (tasks as array)
+    sass           = require('gulp-sass'),          //sass compiler
+    mainBowerFiles = require('main-bower-files'),   //gets the main bower dependencies files
+    fs             = require('fs'),                 //filesystem util
+    path           = require('path'),               //path for fs
+    gulpif         = require('gulp-if'),            //execute tasks conditionally
+    gutil          = require('gulp-util'),          //utilities for gulp plugins
+    connect        = require('gulp-connect'),       //spawns local server for testing
+    modRewrite     = require('connect-modrewrite'), //modrewrite for tmp server
+    open           = require('gulp-open'),          //opens the browser
+    sourcemaps     = require('gulp-sourcemaps');    //creates sourcemaps for debugging
 
 
 /**
@@ -54,7 +57,12 @@ gulp.task('core-js', function () {
     //Get the vendor files
     var src = mainBowerFiles({
         includeDev : true,
-        filter     : new RegExp('.js$')
+        filter     : new RegExp('.js$'),
+        overrides  : {
+            'AdminLTE' : {
+                ignore : true
+            }
+        }
     });
 
     //Concat the vendor with the core scripts
@@ -105,16 +113,21 @@ gulp.task('watch-lazy-js', ['lazy-js'], function () {
 //compile app specific scss to css
 gulp.task('css', function() {
     //Get the vendor files
+
     var src = mainBowerFiles({
         includeDev : true,
         filter     : new RegExp('.css$')
     });
 
-    src.concat([
-        'src/scss/*.scss'
-    ]);
+    //Add bootstrap to the top of the file so it doesnt override adminlte styles
+    src.unshift(
+        'src/scss/bootstrap.scss'
+    );
 
-    console.log(src);
+    //Put custom scss on the bottom so it can override all
+    src.push(
+        'src/scss/bb-admin.scss'
+    );
 
     gulp.src(src)
         .pipe(sourcemaps.init())
@@ -148,6 +161,50 @@ gulp.task('fonts', function() {
  * END OF FONTS RELATED TASKS
  */
 
+/**
+ * TMP LOCAL SERVER for DEV
+ */
+gulp.task('web-server', function() {
+    //@todo Update connect version (here 2.3.1) when issue is fixed, a bug in later versions ignores index.html in directories.
+    connect.server({
+        root: [
+            'release'
+        ],
+        port: 8000,
+        livereload: true,
+        middleware: function(connect, options) {
+            var middleware = [];
+
+            //1. the rules that shape our mod-rewrite behavior
+            var rules = [
+                '!\\.html|\\.js|\\.css|\\.svg|\\woff|\\ttf|\\eot|\\woff2|\\.jp(e?)g|\\.png|\\.gif$ /index.html'
+            ];
+
+            middleware.push(modRewrite(rules));
+
+            //2. original middleware behavior
+            var base = options.root;
+            if (!Array.isArray(base)) {
+                base = [base];
+            }
+
+            base.forEach(function(path) {
+                console.log(path);
+                middleware.push(connect.static(path));
+            });
+
+            return middleware;
+        }
+    });
+});
+
+gulp.task('open-browser', ['web-server'], function() {
+    return gulp.src(__filename)
+        .pipe(open({uri: 'http://localhost:8000'}));
+});
+/**
+ * END OF LOCAL TMP SERVER
+ */
 
 /**
  * Scan for directories in a directory

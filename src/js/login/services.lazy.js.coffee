@@ -1,1 +1,3 @@
-console.log('lazy login services');
+'use strict'
+
+angular.module('BBAdminApp.login.services', [])
