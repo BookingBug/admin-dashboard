@@ -1,11 +1,6 @@
 'use strict';
 
 angular.module('BBAdminApp.login', [])
-.config ['$ocLazyLoadProvider', ($ocLazyLoadProvider) ->
-  $ocLazyLoadProvider.config {
-    debug: true
-  }
-]
 .config ['$stateProvider', ($stateProvider) ->
   $stateProvider.state 'login', {
     url         : '/login',

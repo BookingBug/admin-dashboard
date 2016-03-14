@@ -5,6 +5,7 @@ var gulp           = require('gulp'),
     uglify         = require('gulp-uglify'),        //uglifies files
     ngAnnotate     = require('gulp-ng-annotate'),   //annotates (angular brakes without this)
     minifyCSS      = require('gulp-minify-css'),    //minifies css files
+    imagemin       = require('gulp-imagemin');      //optimises images
     runSequence    = require('run-sequence'),       //runs gulp tasks in sequence (tasks as array)
     sass           = require('gulp-sass'),          //sass compiler
     mainBowerFiles = require('main-bower-files'),   //gets the main bower dependencies files
@@ -29,7 +30,8 @@ gulp.task('default', function() {
             'core-js',
             'lazy-js',
             'css',
-            'fonts'
+            'fonts',
+            'images'
         ]
     );
 });
@@ -44,7 +46,8 @@ gulp.task('watch-init', function() {
         [
             'watch-core-js',
             'watch-lazy-js',
-            'watch-css'
+            'watch-css',
+            'watch-images'
         ]
     );
 });
@@ -204,6 +207,22 @@ gulp.task('open-browser', ['web-server'], function() {
 });
 /**
  * END OF LOCAL TMP SERVER
+ */
+
+/**
+ * Image optimisation
+ */
+gulp.task('images', function() {
+    gulp.src('src/img/*')
+        .pipe(imagemin())
+        .pipe(gulp.dest('release/img'));
+});
+
+gulp.task('watch-images', ['images'], function () {
+    gulp.watch('src/img/*', ['images']);
+});
+/**
+ * END of image optimisation
  */
 
 /**

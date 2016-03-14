@@ -1,1 +1,33 @@
-Login Whoohoo
+<div id="loginWrapper">
+    <div class="inner row">
+        <div class="col-md-4 col-md-offset-4">
+            <form name="loginForm" ng-model="loginForm" ng-submit="submit(loginForm.$valid)">
+                <div class="login-logo-container">
+                    <span class="login-logo"></span>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Login to view your account</h3>
+                    </div>
+                    <div class="panel-body">
+                        <alert  ng-repeat="alert in formErrors" type="danger" close="formErrors.splice($index, 1)">{{alert.message}}</alert>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" ng-model="user.username" required="required" class="form-control" id="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" ng-model="user.password" required="required" class="form-control" id="password">
+                        </div>
+                        <div class="form-group">
+                            <a class="">Forgot your password?</a>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-unlock"></i> Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

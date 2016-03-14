@@ -1,14 +1,10 @@
 'use strict';
 
 angular.module('BBAdminApp.dashboard', [])
-.config ['$ocLazyLoadProvider', ($ocLazyLoadProvider) ->
-  $ocLazyLoadProvider.config {
-    debug: true
-  }
-]
 .config ['$stateProvider', ($stateProvider) ->
-  $stateProvider.state 'dashboard', {
-    url         : '/dashboard',
+  $stateProvider
+  .state 'admin.dashboard', {
+    url         : 'dashboard',
     templateUrl : '/tpls/dashboard.html',
     controller  : 'DashboardPageCtrl',
     resolve     : {

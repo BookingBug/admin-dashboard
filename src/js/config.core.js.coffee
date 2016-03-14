@@ -2,6 +2,7 @@
 
 dependencies = [
   'ui.router',
+  'ct.ui.router.extras',
   'ngAnimate',
   'ngResource',
   'ngTouch',
@@ -12,26 +13,39 @@ dependencies = [
   'http-auth-interceptor',
   'toastr',
   'angular-loading-bar',
-  'oc.lazyLoad'
+  'oc.lazyLoad',
+  'ngScrollable',
 
   'BBAdminApp.services',
+  'BBAdminApp.controllers',
+  'BBAdminApp.directives',
+
   #Separate app modules
   'BBAdminApp.login',
-  'BBAdminApp.dashboard'
+  'BBAdminApp.dashboard',
+  'BBAdminApp.calendar',
+  'BBAdminApp.customers',
+  'BBAdminApp.settings',
+  'BBAdminApp.check-in'
 ]
-
 
 angular.module('BBAdminApp', dependencies)
 .config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
   #We have to preserve the empty state as an abstract one, for this we always redirect to the default page
   $urlRouterProvider.when("/", "/dashboard");
 
-  $stateProvider.state 'home', {
+  $stateProvider.state 'admin', {
     url         : '/',
     abstract    : true,
     templateUrl : '/tpls/layout.html',
     controller  : 'LayoutCtrl'
   }
+]
+#Configuring the modules specific scripts lazyloader
+.config ['$ocLazyLoadProvider', ($ocLazyLoadProvider) ->
+#  $ocLazyLoadProvider.config {
+#    debug: true
+#  }
 ]
 #Configuring the app to use the history API without the hashbang !#
 .config ['$locationProvider', ($locationProvider) ->
