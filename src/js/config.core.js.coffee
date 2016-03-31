@@ -15,6 +15,10 @@ dependencies = [
   'angular-loading-bar',
   'oc.lazyLoad',
   'ngScrollable',
+  'mwl.calendar',
+
+  'angular-hal',
+  'ngStorage',
 
   'BBAdminApp.services',
   'BBAdminApp.controllers',
@@ -30,6 +34,11 @@ dependencies = [
 ]
 
 angular.module('BBAdminApp', dependencies)
+.constant 'EnvironmentSettings', {
+  "api_url": if environment? and environment.api_url? then  environment.api_url else 'http://localhost:3000'
+}
+#todo remove this (why wrapping a native function?)
+.constant('UriTemplate', window.UriTemplate)
 .config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
   #We have to preserve the empty state as an abstract one, for this we always redirect to the default page
   $urlRouterProvider.when("/", "/dashboard");
@@ -63,12 +72,12 @@ angular.module('BBAdminApp', dependencies)
 .config ['$httpProvider', 'UrlEncoderProvider', ($httpProvider, UrlEncoderProvider) ->
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
-
-  # Override $http service's default transformRequest
-  $httpProvider.defaults.transformRequest = (data) ->
-     if angular.isObject(data) && String(data) != '[object File]' then UrlEncoderProvider.encode data else data;
+#
+#  # Override $http service's default transformRequest
+#  $httpProvider.defaults.transformRequest = [ (data) ->
+#    if angular.isObject(data) and String(data) != '[object File]' then UrlEncoderProvider.encode(data) else data
+#  ]
 ]
 .run ['$rootScope', '$state', ($rootScope, $state) ->
 
 ]
-

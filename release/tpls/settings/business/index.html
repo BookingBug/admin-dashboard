@@ -1,0 +1,35 @@
+<section class="content-header">
+    <h1>
+        Business
+        <small>Settings</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="admin.dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Business settings</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: state.is('admin.settings.business.people')}">
+                <a ui-sref="admin.settings.business.people"><i class="fa fa-users"></i> People</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.business.resources')}">
+                <a ui-sref="admin.settings.business.resources"><i class="fa fa-cubes"></i> Resources</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.business.services')}">
+                <a ui-sref="admin.settings.business.services"><i class="fa fa-wrench"></i> Services</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.business.grid')}">
+                <a ui-sref="admin.settings.business.grid"><i class="fa fa-question-circle"></i> Who/What/Where</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <div ui-view></div>
+            </div>
+        </div>
+    </div>
+</section>

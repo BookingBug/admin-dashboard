@@ -61,8 +61,14 @@
                     <a ui-sref="admin.check-in"><i class="fa fa-calendar-check-o"></i> Check in</a>
                 </li>
                 <li class="header">CONFIGURATION</li>
-                <li ng-class="{active: isState('admin.settings')}">
+                <li class="treeview" ng-class="{active: isState('admin.settings')}">
                     <a ui-sref="admin.settings"><i class="fa fa-cogs"></i> Settings</a>
+                    <ul class="treeview-menu">
+                        <li ng-class="{active: isState('admin.settings.business')}"><a ui-sref="admin.settings.business"><i class="fa fa-home"></i> Your business</a></li>
+                        <li ng-class="{active: isState('admin.settings.events')}"><a ui-sref="admin.settings.events"><i class="fa fa-calendar"></i> Events</a></li>
+                        <li ng-class="{active: isState('admin.settings.promotions')}"><a ui-sref="admin.settings.promotions"><i class="fa fa-tags"></i> Promotions</a></li>
+                        <li ng-class="{active: isState('admin.settings.bookings')}"><a ui-sref="admin.settings.bookings"><i class="fa fa-book"></i> Bookings</a></li>
+                    </ul>
                 </li>
                 <li class="header">MISC</li>
                 <li>
@@ -77,7 +83,7 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" content-height>
-        <div ui-view ng-animate="'contentContainer'"></div>
+        <div ui-view class="animated"></div>
     </div><!-- /.content-wrapper -->
 
     <footer class="main-footer">

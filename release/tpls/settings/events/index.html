@@ -1,0 +1,38 @@
+<section class="content-header">
+    <h1>
+        Events
+        <small>Settings</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="admin.dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Business settings</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: state.is('admin.settings.events.courses')}">
+                <a ui-sref="admin.settings.events.courses"><i class="fa fa-graduation-cap"></i> Courses</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.events.single')}">
+                <a ui-sref="admin.settings.events.single"><i class="fa fa-calendar-o"></i> Single events</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.events.recurring')}">
+                <a ui-sref="admin.settings.events.recurring"><i class="fa fa-calendar"></i> Recurring events</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.events.groups')}">
+                <a ui-sref="admin.settings.events.groups"><i class="fa fa-object-group"></i> Groups</a>
+            </li>
+            <li ng-class="{active: state.is('admin.settings.events.templates')}">
+                <a ui-sref="admin.settings.events.templates"><i class="fa fa-magic"></i> Templates</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <div ui-view></div>
+            </div>
+        </div>
+    </div>
+</section>

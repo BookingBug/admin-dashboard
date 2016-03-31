@@ -4,7 +4,7 @@ var gulp           = require('gulp'),
     concat         = require('gulp-concat'),        //concats files
     uglify         = require('gulp-uglify'),        //uglifies files
     ngAnnotate     = require('gulp-ng-annotate'),   //annotates (angular brakes without this)
-    minifyCSS      = require('gulp-minify-css'),    //minifies css files
+    cleanCSS       = require('gulp-clean-css'),     //minifies css files
     imagemin       = require('gulp-imagemin');      //optimises images
     runSequence    = require('run-sequence'),       //runs gulp tasks in sequence (tasks as array)
     sass           = require('gulp-sass'),          //sass compiler
@@ -16,6 +16,7 @@ var gulp           = require('gulp'),
     connect        = require('gulp-connect'),       //spawns local server for testing
     modRewrite     = require('connect-modrewrite'), //modrewrite for tmp server
     open           = require('gulp-open'),          //opens the browser
+    streamqueue    = require('streamqueue'),        //merges different streams
     sourcemaps     = require('gulp-sourcemaps');    //creates sourcemaps for debugging
 
 
@@ -70,7 +71,7 @@ gulp.task('core-js', function () {
 
     //Concat the vendor with the core scripts
     return gulp.src(src.concat([
-        'src/js/**/*.core.js.coffee'
+        'src/js/**/*.core.*'
     ]))
         .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
         .pipe(concat('bb-admin-core.min.js'))
@@ -122,23 +123,20 @@ gulp.task('css', function() {
         filter     : new RegExp('.css$')
     });
 
-    //Add bootstrap to the top of the file so it doesnt override adminlte styles
-    src.unshift(
-        'src/scss/bootstrap.scss'
-    );
+    var bootstrapSCSS, appSCSS;
 
-    //Put custom scss on the bottom so it can override all
-    src.push(
-        'src/scss/bb-admin.scss'
-    );
-
-    gulp.src(src)
+    bootstrapSCSS = gulp.src('src/scss/bootstrap.scss')
         .pipe(sourcemaps.init())
+        .pipe(sass({onError: function(e) { console.log(e); }, outputStyle: 'compressed'}).on('error', gutil.log));
+    appSCSS = gulp.src('src/scss/bb-admin.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass({onError: function(e) { console.log(e); }, outputStyle: 'compressed'}).on('error', gutil.log));
+    dependenciesCSS = gulp.src(src)
+        .pipe(sourcemaps.init())
+        .pipe(cleanCSS({compatibility: 'ie8'}));
+
+    streamqueue({objectMode: true }, bootstrapSCSS, dependenciesCSS, appSCSS)
         .pipe(concat('bb-admin.min.css'))
-        //The onError handler prevents Gulp from crashing when you make a mistake in your SASS
-        //compile & compress
-        .pipe(sass({onError: function(e) { console.log(e); }, outputStyle: 'compressed'}).on('error', gutil.log))
-        //make source-maps but put them in a different folder & not include content
         .pipe(sourcemaps.write('maps', {includeContent: false}))
         .pipe(gulp.dest('release/css'));
 });

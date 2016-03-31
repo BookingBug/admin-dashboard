@@ -43,6 +43,7 @@
     "angular-toastr": "^1.7.0",
     "oclazyload": "^1.0.9",
     "ui-router-extras": "^0.1.0",
+    "angular-bootstrap-calendar": "^0.19.5",
     "ngScrollable": "ng-scrollable#^0.2.3"
   },
   "overrides": {
@@ -58,6 +59,12 @@
     "ngScrollable": {
       "main": [
         "min/ng-scrollable.min.js"
+      ]
+    },
+    "angular-bootstrap-calendar" : {
+      "main" : [
+        "dist/js/angular-bootstrap-calendar-tpls.min.js",
+        "dist/css/angular-bootstrap-calendar.css"
       ]
     }
   }
