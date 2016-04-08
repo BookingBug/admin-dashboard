@@ -43,6 +43,9 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <ul class="sidebar-menu">
+                <li ng-class="{active: isState('admin.dashboard')}">
+                    <a ui-sref="admin.dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
+                </li>
                 <li class="header">BOOKINGS</li>
                 <li class="treeview" ng-class="{active: isState('admin.calendar')}">
                     <a ui-sref="admin.calendar"><i class="fa fa-calendar"></i> Calendar</a>

@@ -1,11 +1,51 @@
 'use strict';
 
 # Calendar modules config
-
 angular.module('BBAdminApp.calendar', [])
-.config ['$stateProvider', ($stateProvider) ->
+
+###
+* @ngdoc service
+* @module BBAdminApp.calendar
+* @name CalendarParentState
+*
+* @description
+* Returns the parent state in case this module is to be used
+* independently from the main admin app
+###
+
+###
+* @ngdoc service
+* @module BBAdminApp.calendar
+* @name CalendarParentStateProvider
+*
+* @description
+* Provider that allows the parent state to be overwritten
+*
+* @example
+  <example>
+  angular.module('ExampleModule').config ['CalendarParentStateProvider', (CalendarParentStateProvider) ->
+    CalendarParentStateProvider.setParent('admin')
+  ]
+  </example>
+###
+angular.module('BBAdminApp.calendar').provider 'CalendarParentState', [ ->
+  parentState = 'admin'
+
+  @setParent = (parent) ->
+    parentState = parent
+    return
+
+  @$get =  ->
+    parentState
+
+  return
+]
+angular.module('BBAdminApp.calendar')
+.config ['$stateProvider', 'CalendarParentStateProvider', ($stateProvider, CalendarParentStateProvider) ->
+  prefix = CalendarParentStateProvider.$get() + (if CalendarParentStateProvider.$get() then '.' else '')
+
   $stateProvider
-  .state 'admin.calendar', {
+  .state  prefix + 'calendar', {
     url         : 'calendar',
     templateUrl : '/tpls/calendar/index.html',
     controller  : 'CalendarPageCtrl',
@@ -16,11 +56,11 @@ angular.module('BBAdminApp.calendar', [])
     },
     deepStateRedirect: {
       default: {
-        state: "admin.calendar.dashboard"
+        state:  prefix + 'calendar.dashboard'
       }
     }
   }
-  .state 'admin.calendar.dashboard', {
+  .state prefix + 'calendar.dashboard', {
     url         : '/dashboard',
     templateUrl : '/tpls/calendar/dashboard.html',
     controller  : 'CalendarDashboardPageCtrl',
@@ -30,7 +70,7 @@ angular.module('BBAdminApp.calendar', [])
       ]
     }
   }
-  .state 'admin.calendar.upcoming', {
+  .state prefix + 'calendar.upcoming', {
     url         : '/upcomming-recent',
     templateUrl : '/tpls/calendar/upcoming.html',
     controller  : 'CalendarUpcomingPageCtrl',
@@ -40,7 +80,7 @@ angular.module('BBAdminApp.calendar', [])
       ]
     }
   }
-  .state 'admin.calendar.search', {
+  .state prefix + 'calendar.search', {
     url         : '/search',
     templateUrl : '/tpls/calendar/search.html',
     controller  : 'CalendarSearchPageCtrl',
@@ -50,7 +90,7 @@ angular.module('BBAdminApp.calendar', [])
       ]
     }
   }
-  .state 'admin.calendar.bulk', {
+  .state prefix + 'calendar.bulk', {
     url         : '/bulk',
     templateUrl : '/tpls/calendar/bulk.html',
     controller  : 'CalendarBulkPageCtrl',
@@ -60,7 +100,7 @@ angular.module('BBAdminApp.calendar', [])
       ]
     }
   }
-  .state 'admin.calendar.insights', {
+  .state prefix + 'calendar.insights', {
     url         : '/insights',
     templateUrl : '/tpls/calendar/insights.html',
     controller  : 'CalendarInsightsPageCtrl',
