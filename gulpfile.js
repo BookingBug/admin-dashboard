@@ -1,23 +1,24 @@
 //Gulp components
 var gulp           = require('gulp'),
-    coffee         = require('gulp-coffee');        //Coffee to js compiler
-    concat         = require('gulp-concat'),        //concats files
-    uglify         = require('gulp-uglify'),        //uglifies files
-    ngAnnotate     = require('gulp-ng-annotate'),   //annotates (angular brakes without this)
-    cleanCSS       = require('gulp-clean-css'),     //minifies css files
-    imagemin       = require('gulp-imagemin');      //optimises images
-    runSequence    = require('run-sequence'),       //runs gulp tasks in sequence (tasks as array)
-    sass           = require('gulp-sass'),          //sass compiler
-    mainBowerFiles = require('main-bower-files'),   //gets the main bower dependencies files
-    fs             = require('fs'),                 //filesystem util
-    path           = require('path'),               //path for fs
-    gulpif         = require('gulp-if'),            //execute tasks conditionally
-    gutil          = require('gulp-util'),          //utilities for gulp plugins
-    connect        = require('gulp-connect'),       //spawns local server for testing
-    modRewrite     = require('connect-modrewrite'), //modrewrite for tmp server
-    open           = require('gulp-open'),          //opens the browser
-    streamqueue    = require('streamqueue'),        //merges different streams
-    sourcemaps     = require('gulp-sourcemaps');    //creates sourcemaps for debugging
+    coffee         = require('gulp-coffee');                //Coffee to js compiler
+    concat         = require('gulp-concat'),                //concats files
+    uglify         = require('gulp-uglify'),                //uglifies files
+    ngAnnotate     = require('gulp-ng-annotate'),           //annotates (angular brakes without this)
+    cleanCSS       = require('gulp-clean-css'),             //minifies css files
+    imagemin       = require('gulp-imagemin');              //optimises images
+    runSequence    = require('run-sequence'),               //runs gulp tasks in sequence (tasks as array)
+    sass           = require('gulp-sass'),                  //sass compiler
+    mainBowerFiles = require('main-bower-files'),           //gets the main bower dependencies files
+    fs             = require('fs'),                         //filesystem util
+    path           = require('path'),                       //path for fs
+    gulpif         = require('gulp-if'),                    //execute tasks conditionally
+    gutil          = require('gulp-util'),                  //utilities for gulp plugins
+    connect        = require('gulp-connect'),               //spawns local server for testing
+    modRewrite     = require('connect-modrewrite'),         //modrewrite for tmp server
+    open           = require('gulp-open'),                  //opens the browser
+    streamqueue    = require('streamqueue'),                //merges different streams
+    templateCache  = require('gulp-angular-templatecache'), //Add templates to templateCache
+    sourcemaps     = require('gulp-sourcemaps');            //creates sourcemaps for debugging
 
 
 /**
@@ -61,19 +62,23 @@ gulp.task('core-js', function () {
     //Get the vendor files
     var src = mainBowerFiles({
         includeDev : true,
-        filter     : new RegExp('.js$'),
-        overrides  : {
-            'AdminLTE' : {
-                ignore : true
-            }
-        }
+        filter     : new RegExp('.js$')
     });
 
-    //Concat the vendor with the core scripts
-    return gulp.src(src.concat([
+    var scripts = gulp.src(src.concat([
         'src/js/**/*.core.*'
-    ]))
-        .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
+    ])).pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)));
+
+    // Add templates to the mix
+    var templates = gulp.src('src/tpls/core/**/**/*.html')
+        .pipe(templateCache({
+            module:'BBAdminCoreTpls',
+            standalone: true,
+            root: '/default/tpls/core/'
+        }));
+
+    //Concat the vendor with the core scripts
+    return streamqueue({objectMode: true }, scripts, templates)
         .pipe(concat('bb-admin-core.min.js'))
         .pipe(ngAnnotate())
         .pipe(uglify())
@@ -85,8 +90,23 @@ gulp.task('lazy-js', function () {
     var folders = getFolders('src/js');
 
     return folders.map(function(folder) {
-        return gulp.src(path.join('src/js', folder, '/**/*.lazy.js.coffee'))
-            .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)))
+        // Skip core (its not meant to be lazy-loaded like the rest)
+        if (folder == 'core') {
+            return;
+        }
+
+        var scripts = gulp.src(path.join('src/js', folder, '/**/*.lazy.js.coffee'))
+            .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)));
+
+        // Add templates to the mix
+        var templates = gulp.src(path.join('src/tpls', folder, '/**/**/*.html'))
+            .pipe(templateCache({
+                module:'BBAdmin'+toCamelCase(folder)+'Tpls',
+                standalone: true,
+                root: '/default/tpls/' + folder
+            }));
+
+        return streamqueue({objectMode: true }, scripts, templates)
             // concat into foldername.js
             .pipe(concat('bb-admin-' + folder + '.min.js'))
             .pipe(ngAnnotate())
@@ -233,4 +253,19 @@ function getFolders(dir) {
         .filter(function(file) {
             return fs.statSync(path.join(dir, file)).isDirectory();
         });
+}
+
+/**
+ * Returns string input to camelcase
+ *
+ * @param str
+ * @returns {*}
+ */
+function toCamelCase(str) {
+    return str.replace(/[^A-Za-z0-9]/g, ' ').replace(/^\w|[A-Z]|\b\w|\s+/g, function (match, index) {
+        if (+match === 0 || match === '-' || match === '.' ) {
+            return ""; // or if (/\s+/.test(match)) for white spaces
+        }
+        return match.toUpperCase();
+    });
 }

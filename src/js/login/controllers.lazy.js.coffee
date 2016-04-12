@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('BBAdminApp.login.controllers', [])
+angular.module('BBAdminApp.login.controllers', [
+  'BBAdminApp.login.services',
+  'BBAdminLoginTpls'
+])
 .controller 'LoginPageCtrl',['$rootScope', '$scope', '$state','toastr','halClient', 'ApiEndPoints', ($rootScope, $scope, $state, toastr, halClient, ApiEndPoints) ->
   console.log 'Login Controller'
 

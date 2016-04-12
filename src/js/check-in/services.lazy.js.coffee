@@ -1,3 +1,3 @@
 'use strict'
 
-angular.module('BBAdminApp.check-in.services', [])
+angular.module('BBAdminApp.check-in.services')

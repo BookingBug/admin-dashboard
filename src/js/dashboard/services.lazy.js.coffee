@@ -1,3 +1,3 @@
 'use strict'
 
-angular.module('BBAdminApp.dashboard.services', [])
+angular.module('BBAdminApp.dashboard.services')

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('BBAdminApp.settings.controllers', [
-  'BBAdminApp.settings.services'
+  'BBAdminSettingsTpls'
 ])
 .controller 'SettingsPageCtrl',['$scope', '$state','toastr', ($scope, $state, toastr) ->
   console.log 'Settings Controller'

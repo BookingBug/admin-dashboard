@@ -57,3 +57,98 @@ angular.module('BBAdminApp.services', [])
       LOGIN_SSO : EnvironmentSettings.api_url + '/api/v1/login/sso/:companyId'
     }
 ]
+
+###
+* @ngdoc service
+* @name BBAdminApp.services.service:TemplateService
+*
+* @description
+* Checks if a custom version of the requested template exists in the templateCache,
+* otherwise returns the default version (which should be compiled with the module)
+###
+angular.module('BBAdminApp.services').factory 'TemplateService', [
+  '$templateCache','$exceptionHandler',
+  ($templateCache, $exceptionHandler) ->
+    {
+      get: (template)->
+        if $templateCache.get(template)?
+          return $templateCache.get(template)
+        else if $templateCache.get('/default' + template)?
+          return $templateCache.get('/default' + template)
+        else
+          $exceptionHandler(new Error('Template "' + template + '" not found'))
+    }
+]
+###
+* @ngdoc service
+* @name BBAdminApp.services.service:RuntimeStates
+*
+* @description
+* Returns an instance of $stateProvider that allows late state binding (on runtime)
+###
+
+###
+* @ngdoc service
+* @name BBAdminApp.services.service:RuntimeStatesProvider
+*
+* @description
+* Provider
+*
+* @example
+  <example>
+  angular.module('ExampleModule').config ['RuntimeStatesProvider', '$stateProvider', (RuntimeStatesProvider, $stateProvider) ->
+    RuntimeStatesProvider.setProvider($stateProvider)
+  ]
+  </example>
+###
+angular.module('BBAdminApp.services').provider 'RuntimeStates', ['$stateProvider', ($stateProvider)->
+  stateProvider  = $stateProvider
+  @setProvider = (provider)->
+    stateProvider = provider
+  @$get = ->
+    stateProvider
+  return
+]
+
+###
+* @ngdoc service
+* @name BBAdminApp.services.service:GeneralOptions
+*
+* @description
+* Returns a set of General configuration options
+###
+
+###
+* @ngdoc service
+* @name BBAdminApp.services.service:GeneralOptionsProvider
+*
+* @description
+* Provider
+*
+* @example
+  <example>
+  angular.module('ExampleModule').config ['GeneralOptionsProvider', (GeneralOptionsProvider) ->
+    GeneralOptionsProvider.setOption('option', 'value')
+  ]
+  </example>
+###
+angular.module('BBAdminApp.services').provider 'GeneralOptions', [ ->
+  # This list of options is meant to grow
+  options = {
+
+  }
+
+  @setOption = (option, value) ->
+    if options.hasOwnProperty(option)
+      options[option] = value
+    return
+
+  @getOption = (option) ->
+    if options.hasOwnProperty(option)
+      return options[option]
+    return
+  @$get =  ->
+    options
+
+  return
+]

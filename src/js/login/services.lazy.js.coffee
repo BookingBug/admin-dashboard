@@ -1,5 +1,5 @@
 'use strict'
 
-angular.module('BBAdminApp.login.services', [])
+angular.module('BBAdminApp.login.services')
 
 

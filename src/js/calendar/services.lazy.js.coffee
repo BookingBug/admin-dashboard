@@ -1,3 +1,3 @@
 'use strict'
 
-angular.module('BBAdminApp.calendar.services', [])
+angular.module('BBAdminApp.calendar.services')

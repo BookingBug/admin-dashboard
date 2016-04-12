@@ -16,3 +16,7 @@ angular.module('BBAdminApp.controllers', [])
 
   console.log 'Layout Controller'
 ]
+.controller 'NotFoundCtrl',['$rootScope', '$scope', '$state', ($rootScope, $scope, $state) ->
+
+  console.log '404 Controller'
+]
