@@ -34,11 +34,11 @@ dependencies = [
   'BBAdminApp.settings',
   'BBAdminApp.check-in'
 ]
+angular.module('BBAdminApp.directives', [])
+angular.module('BBAdminApp.services', [])
+angular.module('BBAdminApp.controllers', [])
 
 angular.module('BBAdminApp', dependencies)
-.constant 'EnvironmentSettings', {
-  "api_url": if environment? and environment.api_url? then  environment.api_url else 'http://localhost:3000'
-}
 #todo remove this (why wrapping a native function?)
 .constant('UriTemplate', window.UriTemplate)
 .config ['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterProvider) ->
@@ -91,11 +91,6 @@ angular.module('BBAdminApp', dependencies)
 .config ['$httpProvider', 'UrlEncoderProvider', ($httpProvider, UrlEncoderProvider) ->
   $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
   $httpProvider.defaults.headers.put['Content-Type']  = 'application/x-www-form-urlencoded;charset=utf-8';
-#
-#  # Override $http service's default transformRequest
-#  $httpProvider.defaults.transformRequest = [ (data) ->
-#    if angular.isObject(data) and String(data) != '[object File]' then UrlEncoderProvider.encode(data) else data
-#  ]
 ]
 .config [
   'GeneralOptionsProvider',

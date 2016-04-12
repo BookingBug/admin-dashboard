@@ -66,7 +66,7 @@ gulp.task('core-js', function () {
     });
 
     var scripts = gulp.src(src.concat([
-        'src/js/**/*.core.*'
+        'src/js/**/**/*.core.*'
     ])).pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)));
 
     // Add templates to the mix
@@ -95,7 +95,7 @@ gulp.task('lazy-js', function () {
             return;
         }
 
-        var scripts = gulp.src(path.join('src/js', folder, '/**/*.lazy.js.coffee'))
+        var scripts = gulp.src(path.join('src/js', folder, '/**/**/*.lazy.js.coffee'))
             .pipe(gulpif(/.*coffee$/, coffee().on('error', gutil.log)));
 
         // Add templates to the mix
@@ -118,12 +118,12 @@ gulp.task('lazy-js', function () {
 
 //File watcher: if a core js is edited run concat compressor again
 gulp.task('watch-core-js', ['core-js'], function () {
-    gulp.watch('src/js/**/*.core.js.coffee', ['core-js']);
+    gulp.watch('src/js/**/**/*.core.js.coffee', ['core-js']);
 });
 
 //File watcher: if a lazy js is edited run concat compressor again
 gulp.task('watch-lazy-js', ['lazy-js'], function () {
-    gulp.watch('src/js/**/*.lazy.js.coffee', ['lazy-js']);
+    gulp.watch('src/js/**/**/*.lazy.js.coffee', ['lazy-js']);
 });
 
 
