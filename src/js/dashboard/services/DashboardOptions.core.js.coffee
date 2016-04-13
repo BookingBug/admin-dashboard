@@ -1,6 +1,5 @@
 'use strict'
 
-angular.module('BBAdminApp.dashboard.services', [])
 ###
 * @ngdoc service
 * @name BBAdminApp.dashboard.services.service:DashboardOptions

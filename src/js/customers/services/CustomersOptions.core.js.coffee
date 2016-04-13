@@ -1,6 +1,5 @@
 'use strict'
 
-angular.module('BBAdminApp.customers.services', [])
 ###
 * @ngdoc service
 * @name BBAdminApp.customers.services.service:CustomersOptions
@@ -24,7 +23,7 @@ angular.module('BBAdminApp.customers.services', [])
   </example>
 ###
 angular.module('BBAdminApp.customers.services').provider 'CustomersOptions', [ ->
-# This list of customers options is meant to grow
+  # This list of customers options is meant to grow
   options = {
     use_default_states : true
     parent_state       : 'admin',

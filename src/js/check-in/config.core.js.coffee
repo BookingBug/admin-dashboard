@@ -1,7 +1,14 @@
 'use strict';
 
+# Placeholder definitions
+angular.module('BBAdminApp.check-in.controllers', [])
+angular.module('BBAdminApp.check-in.services', [])
+angular.module('BBAdminApp.check-in.directives', [])
+
 angular.module('BBAdminApp.check-in', [
-  'BBAdminApp.check-in.services'
+  'BBAdminApp.check-in.controllers',
+  'BBAdminApp.check-in.services',
+  'BBAdminApp.check-in.directives'
 ])
 .run ['RuntimeStates', 'CheckInOptions', 'TemplateService', (RuntimeStates, CheckInOptions, TemplateService) ->
   # Choose to opt out of the default Customers routing

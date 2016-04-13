@@ -1,9 +1,8 @@
 'use strict'
 
-angular.module('BBAdminApp.login.services', [])
 ###
 * @ngdoc service
-* @name BBAdminApp.login.services.service:LoginOptions
+* @name BBAdminApp.check-in.services.service:CheckInOptions
 *
 * @description
 * Returns a set of Calendar configuration options
@@ -11,23 +10,23 @@ angular.module('BBAdminApp.login.services', [])
 
 ###
 * @ngdoc service
-* @name BBAdminApp.login.services.service:LoginOptionsProvider
+* @name BBAdminApp.check-in.services.service:CheckInOptionsProvider
 *
 * @description
 * Provider
 *
 * @example
   <example>
-  angular.module('ExampleModule').config ['LoginOptionsProvider', (LoginOptionsProvider) ->
-    LoginOptionsProvider.setOption('parent_state', 'randomState')
+  angular.module('ExampleModule').config ['CheckInOptionsProvider', (CheckInOptionsProvider) ->
+    CheckInOptionsProvider.setOption('parent_state', 'randomState')
   ]
   </example>
 ###
-angular.module('BBAdminApp.login.services').provider 'LoginOptions', [ ->
-  # This list of login options is meant to grow
+angular.module('BBAdminApp.check-in.services').provider 'CheckInOptions', [ ->
+  # This list of check-in options is meant to grow
   options = {
     use_default_states : true
-    parent_state       : null,
+    parent_state       : 'admin',
   }
 
   @setOption = (option, value) ->

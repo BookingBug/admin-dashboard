@@ -1,7 +1,14 @@
 'use strict';
 
+# Placeholder definitions
+angular.module('BBAdminApp.settings.controllers', [])
+angular.module('BBAdminApp.settings.services', [])
+angular.module('BBAdminApp.settings.directives', [])
+
 angular.module('BBAdminApp.settings', [
-  'BBAdminApp.settings.services'
+  'BBAdminApp.settings.controllers',
+  'BBAdminApp.settings.services',
+  'BBAdminApp.settings.directives'
 ])
 .run ['RuntimeStates', 'SettingsOptions', 'TemplateService', (RuntimeStates, SettingsOptions, TemplateService) ->
   # Choose to opt out of the default routing

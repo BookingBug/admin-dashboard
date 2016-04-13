@@ -1,9 +1,8 @@
 'use strict'
 
-angular.module('BBAdminApp.calendar.services', [])
 ###
 * @ngdoc service
-* @name BBAdminApp.calendar.services.service:CalendarOptions
+* @name BBAdminApp.settings.services.service:SettingsOptions
 *
 * @description
 * Returns a set of Calendar configuration options
@@ -11,20 +10,20 @@ angular.module('BBAdminApp.calendar.services', [])
 
 ###
 * @ngdoc service
-* @name BBAdminApp.calendar.services.service:CalendarOptionsProvider
+* @name BBAdminApp.settings.services.service:SettingsOptionsProvider
 *
 * @description
 * Provider
 *
 * @example
   <example>
-  angular.module('ExampleModule').config ['CalendarOptionsProvider', (CalendarOptionsProvider) ->
-    CalendarOptionsProvider.setOption('parent_state', 'randomState')
+  angular.module('ExampleModule').config ['SettingsOptionsProvider', (SettingsOptionsProvider) ->
+    SettingsOptionsProvider.setOption('parent_state', 'randomState')
   ]
   </example>
 ###
-angular.module('BBAdminApp.calendar.services').provider 'CalendarOptions', [ ->
-# This list of calendar options is meant to grow
+angular.module('BBAdminApp.settings.services').provider 'SettingsOptions', [ ->
+# This list of settings options is meant to grow
   options = {
     use_default_states : true
     parent_state       : 'admin',

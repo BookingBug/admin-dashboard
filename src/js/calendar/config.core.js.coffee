@@ -1,8 +1,15 @@
 'use strict';
 
+# Placeholder definitions
+angular.module('BBAdminApp.calendar.directives', [])
+angular.module('BBAdminApp.calendar.controllers', [])
+angular.module('BBAdminApp.calendar.services', [])
+
 # Calendar modules config
 angular.module('BBAdminApp.calendar', [
-  'BBAdminApp.calendar.services'
+  'BBAdminApp.calendar.services',
+  'BBAdminApp.calendar.controllers',
+  'BBAdminApp.calendar.directives',
 ])
 .run ['RuntimeStates', 'CalendarOptions', 'TemplateService', (RuntimeStates, CalendarOptions, TemplateService) ->
   # Choose to opt out of the default routing

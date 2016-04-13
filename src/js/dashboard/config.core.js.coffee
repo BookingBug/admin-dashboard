@@ -1,7 +1,14 @@
 'use strict';
 
+# Placeholder definitions
+angular.module('BBAdminApp.dashboard.controllers', [])
+angular.module('BBAdminApp.dashboard.services', [])
+angular.module('BBAdminApp.dashboard.directives', [])
+
 angular.module('BBAdminApp.dashboard', [
-  'BBAdminApp.dashboard.services'
+  'BBAdminApp.dashboard.controllers',
+  'BBAdminApp.dashboard.services',
+  'BBAdminApp.dashboard.directives'
 ])
 .run ['RuntimeStates', 'DashboardOptions', 'TemplateService', (RuntimeStates, DashboardOptions, TemplateService) ->
   # Choose to opt out of the default Customers routing
